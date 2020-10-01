@@ -18,12 +18,17 @@ import org.springframework.web.server.ResponseStatusException;
 import br.com.estudos.drogaria.exception.CategoriaException;
 import br.com.estudos.drogaria.model.Categoria;
 import br.com.estudos.drogaria.repository.CategoriaRepository;
+import br.com.estudos.drogaria.service.CategoriaService;
 
 @RestController
 @RequestMapping(value = "/categoria")
 public class CategoriaController {
+	
 	@Autowired
 	private CategoriaRepository categoriaRepository;
+	
+	@Autowired
+	private CategoriaService categoriaService;
 	
 	@GetMapping
 	public List<Categoria> listar(){
@@ -31,16 +36,16 @@ public class CategoriaController {
 		return categoria;
 	}
 	@GetMapping(value = "/{codigo}")
-	public Optional<Categoria> buscar(@PathVariable Short codigo) {
+	public Optional<Categoria> buscar(@PathVariable Short id) {
 		try {
-		Optional<Categoria> categoriaBuscar = categoriaRepository.findById(codigo);
+		Optional<Categoria> categoriaBuscar = categoriaService.buscarPorCodigo(id);
 		return categoriaBuscar;
 		} catch(CategoriaException err) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro Não Encontrado", err);
-		} //Esse tratamento de erro não está funcionando. 
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Busca da Categoria não encontrada", err);
+		} 
 	}
 	
-	@PostMapping
+	@PostMapping(value = "/adicionar")
 	public Categoria inserir(@RequestBody Categoria categoria) {
 		Categoria categoriaInserir = categoriaRepository.save(categoria);
 		return categoriaInserir;
@@ -54,7 +59,7 @@ public class CategoriaController {
 		return Optional.ofNullable(excluirResultado);
 		} catch(CategoriaException err) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Valor não encontrado", err);
-		}//Esse tratamento de erro não está funcionando. 
+		} 
 	}
 	@PutMapping
 	public Categoria editar(@RequestBody Categoria categoria) {
