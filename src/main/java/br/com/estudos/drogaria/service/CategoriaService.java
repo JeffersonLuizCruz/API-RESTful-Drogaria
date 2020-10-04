@@ -18,7 +18,7 @@ public class CategoriaService {//Esse tratamento de erro não está funcionando.
 	public Optional<Categoria> buscarPorCodigo(Short id) {
 		Optional<Categoria> buscaException = categoriaRepository.findById(id);
 		if(buscaException.isEmpty()) {
-			throw new CategoriaException();
+			throw new CategoriaException("Categoria por id não encontrada", "campo id");
 		}
 		return buscaException;
 	}
