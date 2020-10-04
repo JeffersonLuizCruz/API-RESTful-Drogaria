@@ -1,5 +1,6 @@
 package br.com.estudos.drogaria.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -20,7 +21,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Produto {
+public class Produto implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6876360122889824772L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Short id;
