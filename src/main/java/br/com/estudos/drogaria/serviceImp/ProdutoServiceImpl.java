@@ -33,5 +33,13 @@ public class ProdutoServiceImpl implements IprodutoService{
 		}
 		return buscarId;
 	}
+	@Override
+	public Optional<Produto> salvarProduto(Produto produto) throws ProdutoException {
+		Optional<Produto> existeProduto = produtoRepository.findByNome(produto.getNome());
+		if(existeProduto != null && !existeProduto.equals(produto)) {
+			throw new ProdutoException("Produto já existe no sistema", "Campo Nome");
+		}
+		return existeProduto;
+	}
 
 }

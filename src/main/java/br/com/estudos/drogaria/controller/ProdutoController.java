@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,9 +40,9 @@ public class ProdutoController {
 	}
 	
 	@PostMapping("/adicionar")
-	public Produto inserir(@RequestBody Produto produto) {
-		Produto salvar = produtoRepository.save(produto);
-		return salvar;
+	public Optional<Produto> inserir(@Validated @RequestBody Produto produto) throws ProdutoException {
+		Optional<Produto> salvaProduto = produtoService.salvarProduto(produto);
+		return salvaProduto;
 	}
 
 }
