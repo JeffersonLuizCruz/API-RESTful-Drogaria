@@ -39,6 +39,7 @@ public class ProdutoController {
 		return listaTudo;
 	}
 	
+	//
 	@PostMapping("/adicionar")
 	public Optional<Produto> inserir(@Validated @RequestBody Produto produto) throws ProdutoException {
 		Optional<Produto> salvaProduto = produtoService.salvarProduto(produto);
