@@ -45,5 +45,9 @@ public class ProdutoController {
 		Optional<Produto> salvaProduto = produtoService.salvarProduto(produto);
 		return salvaProduto;
 	}
+	
+	public Produto delete() {
+		return null;
+	}
 
 }
