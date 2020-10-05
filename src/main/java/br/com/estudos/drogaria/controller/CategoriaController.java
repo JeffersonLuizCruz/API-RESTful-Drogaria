@@ -18,7 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import br.com.estudos.drogaria.exception.CategoriaException;
 import br.com.estudos.drogaria.model.Categoria;
 import br.com.estudos.drogaria.repository.CategoriaRepository;
-import br.com.estudos.drogaria.service.CategoriaService;
+import br.com.estudos.drogaria.serviceImp.CategoriaService;
 
 @RestController
 @RequestMapping(value = "/categoria")
@@ -38,8 +38,8 @@ public class CategoriaController {
 	@GetMapping(value = "/{codigo}")
 	public Optional<Categoria> buscar(@PathVariable Short id) {
 		try {
-		Optional<Categoria> categoriaBuscar = categoriaService.buscarPorCodigo(id);
-		return categoriaBuscar;
+		Optional<Categoria> pegarIdCategoria = categoriaService.getCategoriaById(id);
+		return pegarIdCategoria;
 		} catch(CategoriaException err) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Busca da Categoria não encontrada", err);
 		} 
@@ -53,9 +53,9 @@ public class CategoriaController {
 	@DeleteMapping(value = "/{codigo}")
 	public Optional<Categoria> excluir(@PathVariable Short codigo) {
 		try {
-		Optional<Categoria> categoriaExcluir = categoriaRepository.findById(codigo);
-		categoriaRepository.delete(categoriaExcluir.get());
-		Categoria excluirResultado = categoriaExcluir.get();
+		Optional<Categoria> excluirCategoriaId = categoriaRepository.findById(codigo);
+		categoriaRepository.delete(excluirCategoriaId.get());
+		Categoria excluirResultado = excluirCategoriaId.get();
 		return Optional.ofNullable(excluirResultado);
 		} catch(CategoriaException err) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Valor não encontrado", err);
