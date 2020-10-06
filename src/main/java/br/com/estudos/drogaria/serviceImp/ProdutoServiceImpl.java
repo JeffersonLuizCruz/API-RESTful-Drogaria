@@ -17,16 +17,7 @@ public class ProdutoServiceImpl implements IprodutoService{
 	private ProdutoRepository produtoRepository;
 
 	@Override
-	public Optional<Produto> getProdutoByNome(String nome) throws ProdutoException {
-		Optional<Produto> buscarNome = produtoRepository.findByNome(nome);
-		if(buscarNome.isEmpty()) {
-			throw new ProdutoException("Produto não encontrado", "Campo Nome");
-		}
-		return buscarNome;
-	}
-
-	@Override
-	public Optional<Produto> getProdutoById(Short id) throws Exception{
+	public Optional<Produto> getProdutoById(Short id) throws ProdutoException{
 		Optional<Produto> buscarId = produtoRepository.findById(id);
 		if(buscarId.isEmpty()) {
 			throw new ProdutoException("Produto não encontrado", "Campo id");
@@ -34,12 +25,12 @@ public class ProdutoServiceImpl implements IprodutoService{
 		return buscarId;
 	}
 	@Override
-	public Optional<Produto> salvarProduto(Produto produto) throws ProdutoException {
-		Optional<Produto> existeProduto = produtoRepository.findByNome(produto.getNome());
+	public Produto salvarProduto(Produto produto) throws ProdutoException {
+		Produto existeProduto = produtoRepository.findByNome(produto);
 		if(existeProduto != null && !existeProduto.equals(produto)) {
 			throw new ProdutoException("Produto já existe no sistema", "Campo Nome");
 		}
-		return existeProduto;
+		return produtoRepository.save(existeProduto);
 	}
 
 }

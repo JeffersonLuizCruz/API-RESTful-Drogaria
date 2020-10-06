@@ -1,12 +1,10 @@
 package br.com.estudos.drogaria.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,26 +25,21 @@ public class ProdutoController {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 	
-	@GetMapping("/{nome}")
-	public Optional<Produto> listarPorNome(@PathVariable String nome) throws ProdutoException{
-		Optional<Produto> listar = produtoService.getProdutoByNome(nome);
-		return listar;
-	}
-	
+	/**Lista Completa**/
 	@GetMapping
 	public List<Produto>ListarTudo(){
 		List<Produto> listaTudo = produtoRepository.findAll();
 		return listaTudo;
 	}
 	
-	//
+	/**Adicionar**/
 	@PostMapping("/adicionar")
-	public Optional<Produto> inserir(@Validated @RequestBody Produto produto) throws ProdutoException {
-		Optional<Produto> salvaProduto = produtoService.salvarProduto(produto);
+	public Produto inserir(@Validated @RequestBody Produto produto) throws ProdutoException {
+		Produto salvaProduto = produtoService.salvarProduto(produto);
 		return salvaProduto;
 	}
-	
-	public Produto delete() {
+	/**Deletar**/
+	public Produto editar() {
 		return null;
 	}
 

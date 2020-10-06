@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +22,7 @@ import br.com.estudos.drogaria.repository.CategoriaRepository;
 import br.com.estudos.drogaria.serviceImp.CategoriaService;
 
 @RestController
-@RequestMapping(value = "/categoria")
+@RequestMapping("/categoria")
 public class CategoriaController {
 	
 	@Autowired
@@ -30,12 +31,15 @@ public class CategoriaController {
 	@Autowired
 	private CategoriaService categoriaService;
 	
+	/**Listar Completa**/
 	@GetMapping
 	public List<Categoria> listar(){
 		List<Categoria> categoria = categoriaRepository.findAll();
 		return categoria;
 	}
-	@GetMapping(value = "/{codigo}")
+	
+	/**Listar por ID**/
+	@GetMapping("/{codigo}")
 	public Optional<Categoria> buscar(@PathVariable Short id) {
 		try {
 		Optional<Categoria> pegarIdCategoria = categoriaService.getCategoriaById(id);
@@ -45,11 +49,14 @@ public class CategoriaController {
 		} 
 	}
 	
-	@PostMapping(value = "/adicionar")
-	public Categoria inserir(@RequestBody Categoria categoria) {
-		Categoria categoriaInserir = categoriaRepository.save(categoria);
+	/**Adicionar**/
+	@PostMapping("/adicionar")
+	public Categoria inserir(@Validated @RequestBody Categoria categoria) throws CategoriaException{
+		Categoria categoriaInserir = categoriaService.salvarCategoria(categoria);
 		return categoriaInserir;
 	}
+	
+	/**Deletar**/
 	@DeleteMapping(value = "/{codigo}")
 	public Optional<Categoria> excluir(@PathVariable Short codigo) {
 		try {
@@ -61,6 +68,7 @@ public class CategoriaController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Valor não encontrado", err);
 		} 
 	}
+	/**Editar**/
 	@PutMapping
 	public Categoria editar(@RequestBody Categoria categoria) {
 		Categoria categoriaEditar = categoriaRepository.save(categoria);

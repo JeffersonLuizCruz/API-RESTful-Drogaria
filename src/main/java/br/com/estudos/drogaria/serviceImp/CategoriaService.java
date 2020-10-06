@@ -11,17 +11,26 @@ import br.com.estudos.drogaria.model.Categoria;
 import br.com.estudos.drogaria.repository.CategoriaRepository;
 
 @Service
-public class CategoriaService implements IcategoriaService{//Esse tratamento de erro não está funcionando. 
+public class CategoriaService implements IcategoriaService{
 	
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 	
 	public Optional<Categoria> getCategoriaById(Short id) {
-		Optional<Categoria> buscaException = categoriaRepository.findById(id);
-		if(buscaException.isEmpty()) {
+		Optional<Categoria> buscaId = categoriaRepository.findById(id);
+		if(buscaId.isEmpty()) {
 			throw new CategoriaException("Categoria por id não encontrada", "campo id");
 		}
-		return buscaException;
+		return buscaId;
+	}
+
+	@Override
+	public Categoria salvarCategoria(Categoria categoria) throws CategoriaException{
+		Categoria existeCategoria = categoriaRepository.findByNome(categoria.getNome());
+		if(existeCategoria != null && !existeCategoria.equals(categoria)) {
+			throw new CategoriaException("Categoria já existe", "Campo nome");
+		}
+		return categoriaRepository.save(existeCategoria);
 	}
 
 }
